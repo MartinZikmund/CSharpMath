@@ -1,8 +1,6 @@
 name: Release
 
-on:
-  release:
-    types: [published]
+on: [push, pull_request]
 jobs:
   CSharpMath:
     runs-on: ubuntu-latest
@@ -29,15 +27,8 @@ jobs:
         
         # -r for restore
         dotnet msbuild -r -p:Configuration=Release -p:PackageVersion="${{ github.event.release.tag_name }}" -p:PackageReleaseNotes="$RELEASE_NOTES" CSharpMath.CrossPlatform.slnf
-    - name: Upload to GitHub Releases
-      uses: svenstaro/upload-release-action@v2
+    - name: Archive nugets
+      uses: actions/upload-artifact@v3
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.ref }}
-        file: .nupkgs/*
-        file_glob: true
-        overwrite: true
-    - name: Upload to NuGet
-      run: | # We use double quotes to avoid shell globbing: https://github.com/NuGet/Home/issues/4393#issuecomment-667618120
-        # Use --skip-duplicate since we want re-runs of this workflow to succeed in case of network issues
-        dotnet nuget push ".nupkgs/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json  --skip-duplicate
+        name: nugets
+        path: .nupkgs/*
