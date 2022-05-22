@@ -13,11 +13,6 @@ jobs:
       with:
         dotnet-version: '3.1.401'
     - name: Build GitHub Releases draft artifacts
-      env:
-        RELEASE_NOTES: |
-          # ${{ github.event.release.name }}
-          
-          ${{ github.event.release.body }}
       run: |
         # .NET Core MSBuild cannot parse , and ; correctly so we replace them with substitutions: https://github.com/dotnet/msbuild/issues/471#issuecomment-366268743
         # https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion
@@ -26,7 +21,7 @@ jobs:
         RELEASE_NOTES=${RELEASE_NOTES//;/%3B}
         
         # -r for restore
-        dotnet msbuild -r -p:Configuration=Release -p:PackageVersion="${{ github.event.release.tag_name }}" -p:PackageReleaseNotes="$RELEASE_NOTES" CSharpMath.CrossPlatform.slnf
+        dotnet msbuild -r -p:Configuration=Release -p:PackageVersion="42.0-playingwithphysics" CSharpMath.CrossPlatform.slnf
     - name: Archive nugets
       uses: actions/upload-artifact@v3
       with:
