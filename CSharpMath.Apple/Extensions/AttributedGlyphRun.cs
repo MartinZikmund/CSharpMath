@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Globalization;
 using CoreText;
 using CSharpMath.Display;

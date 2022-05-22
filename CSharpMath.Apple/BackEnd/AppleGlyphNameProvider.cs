@@ -1,3 +1,5 @@
+#nullable disable
+
 using CoreGraphics;
 using TGlyph = System.UInt16;
 namespace CSharpMath.Apple {
