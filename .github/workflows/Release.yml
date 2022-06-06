@@ -2,9 +2,6 @@ name: Release
 
 on: [push, pull_request]
 
-env:
-  AZURE_ARTIFACTS_FEED_URL: https://pkgs.dev.azure.com/sphereline/_packaging/PlayingWithPhysicsCustomized/nuget/v3/index.json    
-
 jobs:
   CSharpMath:
     runs-on: ubuntu-latest
@@ -15,10 +12,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.401'
-        source-url: ${{ env.AZURE_ARTIFACTS_FEED_URL }}
-      env:
-        NUGET_AUTH_TOKEN: ${{ secrets.AzureDevOps }}       
+        dotnet-version: '3.1.401'      
   
     - name: Build GitHub Releases draft artifacts
       run: |
