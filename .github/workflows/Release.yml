@@ -1,6 +1,10 @@
 name: Release
 
 on: [push, pull_request]
+
+env:
+  AZURE_ARTIFACTS_FEED_URL: https://pkgs.dev.azure.com/sphereline/_packaging/PlayingWithPhysics/nuget/v3/index.json    
+
 jobs:
   CSharpMath:
     runs-on: ubuntu-latest
@@ -12,6 +16,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.401'
+        source-url: ${{ env.AZURE_ARTIFACTS_FEED_URL }}
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.AzureDevOps }}       
+  
     - name: Build GitHub Releases draft artifacts
       run: |
         # .NET Core MSBuild cannot parse , and ; correctly so we replace them with substitutions: https://github.com/dotnet/msbuild/issues/471#issuecomment-366268743
@@ -22,6 +30,10 @@ jobs:
         
         # -r for restore
         dotnet msbuild -r -p:Configuration=Release -p:PackageVersion="42.0-playingwithphysics" CSharpMath.CrossPlatform.slnf
+
+    - name: dotnet publish
+      run: dotnet nuget push --api-key AzureArtifacts .nupkgs/* 
+  
     - name: Archive nugets
       uses: actions/upload-artifact@v3
       with:
