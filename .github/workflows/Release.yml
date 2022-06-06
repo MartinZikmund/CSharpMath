@@ -32,7 +32,7 @@ jobs:
         dotnet msbuild -r -p:Configuration=Release -p:PackageVersion="42.$GITHUB_RUN_NUMBER-playingwithphysics" CSharpMath.CrossPlatform.slnf
 
     - name: dotnet publish
-      run: dotnet nuget push --api-key AzureArtifacts .nupkgs/**/*.nupkg 
+      run: dotnet nuget push --api-key ${{ secrets.MyGet }} -Source https://www.myget.org/F/playingwithphysics/api/v2/package .nupkgs/**/*.nupkg 
   
     - name: Archive nugets
       uses: actions/upload-artifact@v3
