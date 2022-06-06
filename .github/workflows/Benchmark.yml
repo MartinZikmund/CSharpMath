@@ -1,6 +1,5 @@
 name: Benchmark
 
-on: [push, pull_request]
 jobs:
   Rendering:
     runs-on: windows-latest
